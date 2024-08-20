@@ -1,6 +1,6 @@
 const express = require('express');
 const upload = require('../helper/imageUplode');
-const { createNewUser, getAllUsers, getUserById, updateUser, removeUser, sentInvitaionLinkToAdmin, sentInvitationLinkToWaiter, generateUserReport, getUserOrders, getUserOrderById, dashBoard } = require('../controller/user.controller');
+const { createNewUser, getAllUsers, getUserById, updateUser, removeUser, sentInvitaionLinkToAdmin, sentInvitationLinkToWaiter, generateUserReport, getUserOrders, getUserOrderById, dashBoard, updateUserStatus } = require('../controller/user.controller');
 const { userLogin, setPassword } = require('../auth/auth');
 const { createTable, getAllTables, getTablesById, updateTables, deleteTables } = require('../controller/tables.controller');
 const { createSector, getAllSector, getSectorById, updateSector, deleteSector, addtable, getTableStats, getSectorWithTable } = require('../controller/sector.controller');
@@ -34,6 +34,7 @@ indexRouter.post('/createUser', createNewUser);
 indexRouter.get('/AllUsers', getAllUsers);
 indexRouter.get('/getUser/:id', getUserById);
 indexRouter.put('/updateUser/:id', updateUser);
+indexRouter.put('/updateUserStaus/:id', updateUserStatus);
 indexRouter.delete('/deleteUser/:id', removeUser)
 indexRouter.get('/searchUserMonths', generateUserReport);
 indexRouter.get('/getUserOrder/:id', getUserOrderById);
