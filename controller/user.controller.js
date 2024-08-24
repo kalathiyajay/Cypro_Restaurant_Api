@@ -107,6 +107,26 @@ exports.updateUser = async (req, res) => {
     }
 };
 
+exports.updateUserStatus = async (req, res) => {
+    try {
+        let userId = req.params.id
+
+        let checkUserId = await user.findById(userId)
+
+        if (!checkUserId) {
+            return res.status(404).json({ status: "User Not Found" })
+        }
+
+        checkUserId = await user.findByIdAndUpdate(userId, { status: 'Active' }, { new: true })
+
+        return res.status(200).json({ status: 200, message: "User Active SuccessFully..", user: checkUserId });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ status: 500, message: error.message })
+    }
+}
+
 exports.removeUser = async (req, res) => {
     try {
         let id = req.params.id
@@ -117,7 +137,7 @@ exports.removeUser = async (req, res) => {
             return res.status(404).json({ status: 404, message: "User Not Found" });
         }
 
-        await user.findByIdAndDelete(id);
+        await user.findByIdAndUpdate(id, { status: 'Suspend' }, { new: true });
 
         return res.status(200).json({ status: 200, message: "User Deleted SuccessFully..." });
 

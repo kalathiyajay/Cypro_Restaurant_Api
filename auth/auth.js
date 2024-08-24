@@ -6,7 +6,7 @@ exports.userLogin = async (req, res) => {
     try {
         let { email, password } = req.body;
 
-        let checkEmail = await user.findOne({ email: email })
+        let checkEmail = await user.findOne({ email: email, status: 'Active' })
 
         if (!checkEmail) {
             return res.status(404).json({ status: 404, message: "Email Not Found" })
