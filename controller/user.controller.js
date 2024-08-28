@@ -378,8 +378,49 @@ exports.sentInvitationLinkToWaiter = async (req, res) => {
 
 exports.dashBoard = async (req, res) => {
     try {
+        const { duration, month, day } = req.query;
 
-        const orders = await order.find()
+        const months = {
+            January: 1,
+            February: 2,
+            March: 3,
+            April: 4,
+            May: 5,
+            June: 6,
+            July: 7,
+            August: 8,
+            September: 9,
+            October: 10,
+            November: 11,
+            December: 12
+        };
+
+        let dateFilter = {};
+
+        if (duration === 'month' && month) {
+            const start = new Date(new Date().getFullYear(), months[month] - 1, 1);
+            const end = new Date(new Date().getFullYear(), months[month], 0);
+            dateFilter = { createdAt: { $gte: start, $lte: end } };
+            console.log(dateFilter);
+        }
+        else if (duration === 'day' && day) {
+            const start = new Date(day);
+            const end = new Date(start);
+            end.setDate(start.getDate() + 1);
+            dateFilter = { createdAt: { $gte: start, $lt: end } };
+            console.log(dateFilter);
+        }
+        else if (duration === 'week') {
+            const today = new Date();
+            const start = today;
+            start.setDate(today.getDate() - today.getDay());
+            const end = new Date(start);
+            end.setDate(start.getDate() - 7);
+            dateFilter = { createdAt: { $gte: start, $lt: end } };
+            console.log(dateFilter);
+        }
+
+        const orders = await order.find(dateFilter)
         const orderIds = orders.map(order => order._id);
 
         const orderDetails = await order.find({ _id: { $in: orderIds } }).populate('orderDetails.ArticalId');
